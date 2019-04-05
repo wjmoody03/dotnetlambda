@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cXMLHandler", "cXMLHandler\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cXMLHandler.Tests", "cXMLHandler.Tests\cXMLHandler.Tests.csproj", "{31BC52A2-1A8C-48D0-AAE4-6E63750F15D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cXMLHandler.Parser", "cXMLHandler.Parser\cXMLHandler.Parser.csproj", "{9028F5E8-9ED8-4539-9FFF-B336BA7331EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{31BC52A2-1A8C-48D0-AAE4-6E63750F15D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31BC52A2-1A8C-48D0-AAE4-6E63750F15D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31BC52A2-1A8C-48D0-AAE4-6E63750F15D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9028F5E8-9ED8-4539-9FFF-B336BA7331EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9028F5E8-9ED8-4539-9FFF-B336BA7331EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9028F5E8-9ED8-4539-9FFF-B336BA7331EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9028F5E8-9ED8-4539-9FFF-B336BA7331EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
