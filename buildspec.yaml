@@ -7,4 +7,4 @@ phases:
       - dotnet build --configuration RELEASE
 artifacts:
   files:
-    - .\cXMLHandler\bin\Release\netcoreapp2.1\publish\*
+    - cXMLHandler/bin/Release/netcoreapp2.1/publish/*
