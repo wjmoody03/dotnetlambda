@@ -13,6 +13,11 @@
 			"Type" : "String",
 			"Description" : "Name of S3 bucket that will be proxied. If left blank a name will be generated.",
 			"MinLength" : "0"
+		},
+		"SourceCodeBucketUri" : {
+			"Type" : "String",
+			"Description" : "Path to S3 bucket that contains lambda package.",
+			"MinLength" : "0"
 		}
 	},
 
@@ -28,7 +33,7 @@
 				"Properties": {
 				"Handler": "cXMLHandler::cXMLHandler.LambdaEntryPoint::FunctionHandlerAsync",
 				"Runtime": "dotnetcore2.1",
-				"CodeUri": "",
+				"CodeUri": { "Ref" : "SourceCodeBucketUri" },
 				"MemorySize": 256,
 				"Timeout": 30,
 				"Role": null,
