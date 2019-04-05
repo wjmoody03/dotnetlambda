@@ -43,7 +43,7 @@ namespace cXMLHandler.Controllers
         }
 
         [HttpPost]
-        public async Task Post()
+        public async Task<string> Post()
         {
             // Copy the request body into a seekable stream required by the AWS SDK for .NET.
             var seekableStream = new MemoryStream();
@@ -60,6 +60,7 @@ namespace cXMLHandler.Controllers
 
             try
             {
+                
                 var response = await this.S3Client.PutObjectAsync(putRequest);
                 Logger.LogInformation($"Uploaded object {key} to bucket {this.BucketName}. Request Id: {response.ResponseMetadata.RequestId}");
 
@@ -75,15 +76,19 @@ namespace cXMLHandler.Controllers
                         )
                     );
 
-                this.Response.StatusCode = (int)HttpStatusCode.OK;
-                var writer = new StreamWriter(this.Response.Body);
-                writer.Write(orderResponse);
+                //this.Response.StatusCode = 200;
+                //this.Response.ContentType = "application/xml";
+                return orderResponse.ToString();
+                //this.Response.StatusCode = (int)HttpStatusCode.OK;
+                //var writer = new StreamWriter(this.Response.Body);
+                //writer.Write(orderResponse.ToString());
             }
             catch (AmazonS3Exception e)
             {
                 this.Response.StatusCode = (int)e.StatusCode;
-                var writer = new StreamWriter(this.Response.Body);
-                writer.Write(e.Message);
+                //var writer = new StreamWriter(this.Response.Body);
+                //writer.Write(e.Message);
+                return e.Message;
             }
         }
 
