@@ -4,10 +4,10 @@ phases:
   build:
     commands:
       - dotnet restore
-      - dotnet build --configuration RELEASE
+      - dotnet publish --configuration RELEASE
       - echo $CODEBUILD_SRC_DIR
 artifacts:
   files:
-    - 'cXMLHandler/bin/Release/netcoreapp2.1/*'
+    - 'cXMLHandler/bin/Release/netcoreapp2.1/publish/*'
   name: 'cXMLHandler.zip'
   discard-paths: yes
