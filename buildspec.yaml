@@ -4,7 +4,7 @@ phases:
   build:
     commands:
       - dotnet restore
-      - dotnet build
+      - dotnet build --configuration RELEASE
 artifacts:
   files:
-    - .\cXMLHandler\bin\Debug\netcoreapp2.1\*
+    - .\cXMLHandler\bin\Release\netcoreapp2.1\publish\*
