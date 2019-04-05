@@ -9,3 +9,5 @@ phases:
 artifacts:
   files:
     - 'cXMLHandler/bin/Release/netcoreapp2.1/*'
+  name:
+    - 'cXMLHandler.zip'
