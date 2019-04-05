@@ -10,3 +10,4 @@ artifacts:
   files:
     - 'cXMLHandler/bin/Release/netcoreapp2.1/*'
   name: 'cXMLHandler.zip'
+  discard-paths: yes
