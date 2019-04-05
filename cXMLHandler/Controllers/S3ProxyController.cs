@@ -110,6 +110,35 @@ namespace cXMLHandler.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task Post()
+        {
+            // Copy the request body into a seekable stream required by the AWS SDK for .NET.
+            var seekableStream = new MemoryStream();
+            await this.Request.Body.CopyToAsync(seekableStream);
+            seekableStream.Position = 0;
+
+            string key = DateTime.Now.ToString("yyyyMMddhhmmss");
+            var putRequest = new PutObjectRequest
+            {
+                BucketName = this.BucketName,
+                Key = key,
+                InputStream = seekableStream
+            };
+
+            try
+            {
+                var response = await this.S3Client.PutObjectAsync(putRequest);
+                Logger.LogInformation($"Uploaded object {key} to bucket {this.BucketName}. Request Id: {response.ResponseMetadata.RequestId}");
+            }
+            catch (AmazonS3Exception e)
+            {
+                this.Response.StatusCode = (int)e.StatusCode;
+                var writer = new StreamWriter(this.Response.Body);
+                writer.Write(e.Message);
+            }
+        }
+
         [HttpDelete("{key}")]
         public async Task Delete(string key)
         {
