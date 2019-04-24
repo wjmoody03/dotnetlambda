@@ -67,7 +67,7 @@ namespace cXMLHandler.Controllers
                 var orderResponse = new XElement("cXML",
                         new XAttribute("payloadID", $"order_{key}"),
                         new XAttribute(XNamespace.Xml + "lang", "en"),
-                        new XAttribute("timestamp", DateTime.Now.ToString("yyyyMMddThh:mm:ssK")),
+                        new XAttribute("timestamp", DateTime.Now.ToString("yyyy-MM-ddThh:mm:ssK")),
                         new XElement("Response",
                             new XElement("Status",
                                 new XAttribute("code", "200"),
