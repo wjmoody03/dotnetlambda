@@ -13,6 +13,7 @@ using Amazon.S3.Model;
 using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.Net;
+using System.Text;
 
 namespace cXMLHandler.Controllers
 {
@@ -65,27 +66,32 @@ namespace cXMLHandler.Controllers
                 Logger.LogInformation($"Uploaded object {key} to bucket {this.BucketName}. Request Id: {response.ResponseMetadata.RequestId}");
 
                 var orderResponse = new XElement("cXML",
+                        new XAttribute("version", $"1.2.011"),
                         new XAttribute("payloadID", $"order_{key}"),
                         new XAttribute(XNamespace.Xml + "lang", "en"),
                         new XAttribute("timestamp", DateTime.Now.ToString("yyyy-MM-ddThh:mm:ssK")),
                         new XElement("Response",
                             new XElement("Status",
                                 new XAttribute("code", "200"),
-                                new XAttribute("text", "OK")
+                                new XAttribute("text", "success")
                             )
                         )
                     );
 
+                string declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\"  standalone=\"no\"?>";
+                string docType = $"<!DOCTYPE cXML SYSTEM \"http://xml.cxml.org/schemas/cXML/1.2.0.11/cXML.dtd\">";
+                string xml = $"{declaration}\r\n{docType}\r\n{orderResponse.ToString()}";
                 //this.Response.StatusCode = 200;
-                //this.Response.ContentType = "application/xml";
-                return orderResponse.ToString();
+                //this.Response.ContentType = "text/xml";
+                return xml;
+
                 //this.Response.StatusCode = (int)HttpStatusCode.OK;
-                //var writer = new StreamWriter(this.Response.Body);
-                //writer.Write(orderResponse.ToString());
+                //var writer = new StreamWriter(this.Response.Body, Encoding.Unicode);
+                //writer.Write(xml);
             }
             catch (AmazonS3Exception e)
             {
-                this.Response.StatusCode = (int)e.StatusCode;
+                //this.Response.StatusCode = (int)e.StatusCode;
                 //var writer = new StreamWriter(this.Response.Body);
                 //writer.Write(e.Message);
                 return e.Message;
