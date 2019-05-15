@@ -44,7 +44,7 @@ namespace cXMLHandler.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Post()
+        public async Task Post()
         {
             // Copy the request body into a seekable stream required by the AWS SDK for .NET.
             var seekableStream = new MemoryStream();
@@ -81,20 +81,20 @@ namespace cXMLHandler.Controllers
                 string declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\"  standalone=\"no\"?>";
                 string docType = $"<!DOCTYPE cXML SYSTEM \"http://xml.cxml.org/schemas/cXML/1.2.0.11/cXML.dtd\">";
                 string xml = $"{declaration}\r\n{docType}\r\n{orderResponse.ToString()}";
-                //this.Response.StatusCode = 200;
-                //this.Response.ContentType = "text/xml";
-                return xml;
 
-                //this.Response.StatusCode = (int)HttpStatusCode.OK;
-                //var writer = new StreamWriter(this.Response.Body, Encoding.Unicode);
-                //writer.Write(xml);
+                this.Response.StatusCode = 200;
+                this.Response.ContentType = "text/xml";
+                this.Response.StatusCode = (int)HttpStatusCode.OK;                
+                var utf8bytes = System.Text.Encoding.UTF8.GetBytes(xml);
+                var utf16bytes = System.Text.Encoding.Convert(Encoding.UTF8, Encoding.Unicode, utf8bytes);
+                this.Response.ContentLength = utf16bytes.Length;
+                this.Response.Body.Write(utf16bytes, 0, utf16bytes.Length);
             }
             catch (AmazonS3Exception e)
             {
-                //this.Response.StatusCode = (int)e.StatusCode;
-                //var writer = new StreamWriter(this.Response.Body);
-                //writer.Write(e.Message);
-                return e.Message;
+                this.Response.StatusCode = (int)e.StatusCode;
+                var writer = new StreamWriter(this.Response.Body);
+                writer.Write(e.Message);
             }
         }
 
