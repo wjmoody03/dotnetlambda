@@ -8,13 +8,9 @@
 
 		"All the command line options for the Lambda command can be specified in this file."
 	],
-	
-    "profile":"",
-    "region" : "",
+	   
+  "region" : "us-west-2",
 	"configuration" : "Release",
 	"framework"     : "netcoreapp2.1",
-	"function-runtime": "dotnetcore2.1",
-	"s3-prefix"     : "cXMLHandler/",
-	"template"      : "serverless.template",
-	"template-parameters" : "ShouldCreateBucket=true;BucketName="
+	"function-runtime": "dotnetcore2.1"
 }

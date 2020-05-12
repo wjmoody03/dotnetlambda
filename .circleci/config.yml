@@ -1,0 +1,58 @@
+version: 2.1
+
+executors:
+  microsoft-dotnet-21:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.1
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - deploy-staging:
+          context: cXMLHandler-Staging
+          filters:
+            branches:
+              only:
+                - staging
+      - deploy-production:
+          context: cXMLHandler-Production
+          filters:
+            branches:
+              only:
+                - master            
+      
+jobs:
+    deploy: &deploy
+        executor: microsoft-dotnet-21
+        steps:
+            - checkout  
+            - run: dotnet restore
+            - run: dotnet build /root/project/src/cXMLHandler/cXMLHandler.csproj
+            - run: dotnet test /root/project/src/cXMLHandler/cXMLHandler.Tests --logger "trx"
+            - run:
+                name: process test results
+                command: |
+                    dotnet tool install -g trx2junit
+                    export PATH="$PATH:/root/.dotnet/tools"
+                    trx2junit /root/project/src/cXMLHandler/cXMLHandler.Tests/TestResults/*.trx --output /root/project/src/cXMLHandler/cXMLHandler.Tests/TestResults/results
+            - store_test_results:
+                path: /root/project/src/cXMLHandler/cXMLHandler.Tests/TestResults
+            - store_artifacts:
+                path: /root/project/src/cXMLHandler/cXMLHandler.Tests/TestResults
+                destination: TestResults
+            - run:
+                name: Deploy cXMLHandler
+                command: |
+                    apt-get update
+                    apt-get install -y zip
+                    dotnet tool install -g Amazon.Lambda.Tools
+                    export PATH="$PATH:/root/.dotnet/tools"
+                    dotnet lambda deploy-function --project-location src/cXMLHandler --function-name $FUNCTION_NAME --region us-west-2 --aws-access-key-id $ACCESS_KEY --aws-secret-key $SECRET                 
+    deploy-staging:
+        <<: *deploy
+    deploy-production:
+        <<: *deploy                          
+
+
+    

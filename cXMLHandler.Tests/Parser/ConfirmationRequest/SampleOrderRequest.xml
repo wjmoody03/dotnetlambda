@@ -1,0 +1,108 @@
+﻿<?xml version='1.0' encoding='UTF-8'?><!DOCTYPE cXML SYSTEM 'http://xml.cxml.org/schemas/cXML/1.2.025/cXML.dtd'>
+<cXML version="1.2.025" payloadID="2000001293.80.1559285670154@vroozi.com" timestamp="2019-05-31T06:54:30+0000">
+    <Header>
+        <From>
+            <Credential domain="NetworkID">
+                <Identity>H.E.B</Identity>
+            </Credential>
+        </From>
+        <To>
+            <Credential domain="NetworkID">
+                <Identity>bargreen</Identity>
+            </Credential>
+        </To>
+        <Sender>
+            <Credential domain="NetworkID">
+                <Identity>vroozi</Identity>
+                <SharedSecret>jfWTrzypmND99i3MOge7</SharedSecret>
+            </Credential>
+            <UserAgent>PurchaseManager</UserAgent>
+        </Sender>
+    </Header>
+    <Request>
+        <OrderRequest>
+            <OrderRequestHeader orderID="2000001293" orderDate="2019-05-31" orderType="regular" type="new" requisitionID="1000002320">
+                <Total>
+                    <Money currency="USD">238.04</Money>
+                </Total>
+                <ShipTo>
+                    <Address isoCountryCode="US" addressID="808191">
+                        <Name xml:lang="en-US">HEB Corporate</Name>
+                        <PostalAddress>
+                            <DeliverTo>Admin Vroozi</DeliverTo>
+                            <Street>646 S FLORES ST</Street>
+                            <Street></Street>
+                            <City>SAN ANTONIO</City>
+                            <State>TX</State>
+                            <PostalCode>782041219</PostalCode>
+                            <Country isoCountryCode="US">United States</Country>
+                        </PostalAddress>
+                        <Email>info@heb.com</Email>
+                        <Phone>
+                            <TelephoneNumber>
+<CountryCode isoCountryCode="US">1</CountryCode>
+<AreaOrCityCode>210</AreaOrCityCode>
+<Number>9388000</Number>
+                            </TelephoneNumber>
+                        </Phone>
+                    </Address>
+                </ShipTo>
+                <BillTo>
+                    <Address isoCountryCode="US" addressID="0000000035">
+                        <Name xml:lang="en-US">H-E-B, LP</Name>
+                        <PostalAddress>
+                            <Street>839944 PO BOX</Street>
+                            <Street></Street>
+                            <City>SAN ANTONIO</City>
+                            <State>TX</State>
+                            <PostalCode>782833944</PostalCode>
+                            <Country isoCountryCode="US">United States</Country>
+                        </PostalAddress>
+                    </Address>
+                </BillTo>
+                <Shipping>
+                    <Money currency="USD">0.00</Money>
+                    <Description xml:lang="en-US"/>
+                </Shipping>
+                <Tax>
+                    <Money currency="USD">18.14</Money>
+                    <Description xml:lang="en-US">Total Tax Amount</Description>
+                </Tax>
+                <Contact role="Supplier">
+                    <Name xml:lang="en-US">BARGREEN ELLINGSON</Name>
+                    <Email>test-C@heb.com</Email>
+                    <IdReference identifier="00086384" domain="supplierReference"/>
+                </Contact>
+                <Contact role="Buyer">
+                    <Name xml:lang="en-US">HEB Buyer</Name>
+                    <Email>heb+buyer@vroozi.com</Email>
+                </Contact>
+                <Comments>Test PO from Vroozi</Comments>
+            </OrderRequestHeader>
+            <ItemOut quantity="10.0" lineNumber="1" requisitionID="1000002320">
+                <ItemID>
+                    <SupplierPartID>VOL90262+</SupplierPartID>
+                    <SupplierPartAuxiliaryID/>
+                </ItemID>
+                <ItemDetail>
+                    <UnitPrice>
+                        <Money currency="USD">21.99</Money>
+                    </UnitPrice>
+                    <Description xml:lang="en-US">
+                        <ShortName>PAN Â½ SIZE 6IN DEEP HOTEL PAN/STEAM TABLE PAN STAINLESS</ShortName>PAN Â½ SIZE 6IN DEEP HOTEL PAN/STEAM TABLE PAN STAINLESS, INTERNAL SKU NO.: 1203618, MODEL: VOL90262+, WARRANTY: 6 months, SAR CODE: 999</Description>
+                    <UnitOfMeasure>EA</UnitOfMeasure>
+                    <Classification domain="UNSPSC">1217-07-04</Classification>
+                    <Extrinsic name="RequisitionItemNumber">00001</Extrinsic>
+                </ItemDetail>
+                <Tax>
+                    <Money currency="USD">18.14</Money>
+                    <Description xml:lang="en-US"></Description>
+                </Tax>
+                <Contact role="endUser">
+                    <Name xml:lang="en-US">Admin Vroozi</Name>
+                    <Email>admin.heb@vroozi.com</Email>
+                </Contact>
+            </ItemOut>
+        </OrderRequest>
+    </Request>
+</cXML>

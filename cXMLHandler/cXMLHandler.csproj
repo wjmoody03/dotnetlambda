@@ -3,14 +3,18 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <AWSProjectType>Lambda</AWSProjectType>
+    <UserSecretsId>20c8583b-5f5a-45c0-a600-649cd1138ce8</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.102.42" />
+    <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.148" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.31.19" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="3.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.4" />
+    <PackageReference Include="Moq" Version="4.14.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cXMLHandler.Parser\cXMLHandler.Parser.csproj" />
