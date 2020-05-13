@@ -17,7 +17,9 @@ namespace cXMLHandler
         string EnvironmentName { get; }
         string AWSAccessKey { get; }
         string AWSSecret { get; }
-
+        string OrderEmailRecipient { get; }
+        string HEBVrooziOutboundSharedSecret { get; }
+        string URLForPOAcknowledgment { get; }
     }
 
     public interface ISettingsProvider
@@ -127,6 +129,12 @@ namespace cXMLHandler
         public string ASPNETCORE_ENVIRONMENT => _provider.GetSecret("ASPNETCORE_ENVIRONMENT", Logger);
 
         public string EnvironmentName => _provider.GetSecret("EnvironmentName", Logger);
+
+        public string OrderEmailRecipient => _provider.GetSecret("OrderEmailRecipient", Logger);
+
+        public string HEBVrooziOutboundSharedSecret => _provider.GetSecret("HEBVrooziOutboundSharedSecret", Logger);
+
+        public string URLForPOAcknowledgment => _provider.GetSecret("URLForPOAcknowledgment", Logger);
     }
 
 

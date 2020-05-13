@@ -42,9 +42,12 @@ namespace cXMLHandler.Controllers
         {
             var cxml = new StreamReader(this.Request.Body).ReadToEnd();
 
+            string payloadId = "N/A";
+            var parsedOrder = M3Order.ParseCXMLOrder(cxml, out payloadId);
+
             await SaveCXMLToS3(cxml);
 
-            await EmailCXMLContents(cxml);
+            await EmailCXMLContents(parsedOrder, cxml);
 
             var orderResponse = new XElement("cXML",
                     new XAttribute("version", $"1.2.011"),
@@ -69,6 +72,7 @@ namespace cXMLHandler.Controllers
             this.Response.ContentLength = utf8bytes.Length;
             this.Response.Body.Write(utf8bytes, 0, utf8bytes.Length);
 
+            await SendPOAcknowledgment(payloadId);
         }
 
         private async Task SaveCXMLToS3(string cXML)
@@ -94,9 +98,52 @@ namespace cXMLHandler.Controllers
             }
         }
 
-        private async Task EmailCXMLContents(string cxml)
-        {
-            await Email.SendEmail(EmailClient, Logger, "cXML Order Received", "cxmlorders@bargreen.io", new List<string>() { "jmoody@bargreen.io" }, cxml);
+        private async Task EmailCXMLContents(M3Order parsedOrder, string cxml)
+        {            
+            string orderLinesHtml = HtmlGenerator.ToHtmlTable(parsedOrder.OrderLines);
+            string subject = $"cXML Order Received - PO {parsedOrder.CustomerPONumber}";
+            string finalEmail = $"{orderLinesHtml} <hr/> <textarea style='width:100%;'>{cxml}</textarea>";
+            await Email.SendEmail(EmailClient, Logger, subject, "cxmlorders@bargreen.io", new List<string>() { Settings.OrderEmailRecipient }, finalEmail);
         }
+
+        private async Task SendPOAcknowledgment(string referencePayloadId)
+        {
+            string requestContent = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+                                <!DOCTYPE cXML SYSTEM ""http://xml.cxml.org/schemas/cXML/1.2.025/cXML.dtd"">
+                                <cXML version=""1.2.025"" payloadID=""{DateTime.Now.ToString("yyyyMMddhhmmss.1.fff")}@bargreen.com"" xml:lang=""en-US"" timestamp=""{DateTime.Now.ToString("yyyy-MM-ddThh:mm:ssK")}"">
+                                    <Header>
+                                        <From>
+                                            <Credential domain=""NetworkId"">
+                                                <Identity>bargreen</Identity>
+                                            </Credential>
+                                        </From>
+                                        <To>
+                                            <Credential domain=""NetworkId"">
+                                                <Identity>H.E.B</Identity>
+                                            </Credential>
+                                        </To>
+                                        <Sender>
+                                            <Credential domain=""NetworkId"">
+                                                <Identity>vroozi</Identity>
+                                                <SharedSecret>{Settings.HEBVrooziOutboundSharedSecret}</SharedSecret>
+                                            </Credential>
+                                            <UserAgent>BARGREEN</UserAgent>
+                                        </Sender>
+                                    </Header>
+                                    <Request>
+                                        <StatusUpdateRequest>
+                                            <DocumentReference payloadID=""{referencePayloadId}"" />
+                                            <Status code=""200"" text=""OK"" xml:lang=""en-US"">Confirmed</Status>
+                                        </StatusUpdateRequest>
+                                    </Request>
+                                </cXML>";
+
+            using (var webClient = new WebClient())
+            {
+                await webClient.UploadStringTaskAsync(Settings.URLForPOAcknowledgment, requestContent);
+            }
+
+        }
+
     }
 }

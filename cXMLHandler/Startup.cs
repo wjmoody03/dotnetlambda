@@ -50,15 +50,16 @@ namespace cXMLHandler
             var s3 = new Amazon.S3.AmazonS3Client(settings.AWSAccessKey, settings.AWSSecret, Amazon.RegionEndpoint.USWest2);
             services.AddSingleton<IAmazonS3>(s3);
 
-            var emailClient = new Mock<IAmazonSimpleEmailService>();
-            emailClient.Setup(e => e.SendEmailAsync(It.IsAny<SendEmailRequest>(), new System.Threading.CancellationToken()))
-                .Callback<SendEmailRequest, System.Threading.CancellationToken>((req, token) =>
-                  {
-                      Console.WriteLine("Email Sent:");
-                      Console.WriteLine(req.Message.Body);
-                  })
-                .Returns(Task.FromResult(new SendEmailResponse()));
-            services.AddSingleton<IAmazonSimpleEmailService>(emailClient.Object);
+            var emailService = new AmazonSimpleEmailServiceClient(settings.AWSAccessKey, settings.AWSSecret, Amazon.RegionEndpoint.USWest2); 
+            //var emailClient = new Mock<IAmazonSimpleEmailService>();
+            //emailClient.Setup(e => e.SendEmailAsync(It.IsAny<SendEmailRequest>(), new System.Threading.CancellationToken()))
+            //    .Callback<SendEmailRequest, System.Threading.CancellationToken>((req, token) =>
+            //      {
+            //          Console.WriteLine("Email Sent:");
+            //          Console.WriteLine(req.Message.Body);
+            //      })
+            //    .Returns(Task.FromResult(new SendEmailResponse()));
+            services.AddSingleton<IAmazonSimpleEmailService>(emailService);
         }
 
         public void ConfigureServices(IServiceCollection services)
