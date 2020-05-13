@@ -40,17 +40,34 @@ namespace cXMLHandler.Controllers
         [HttpPost]
         public async Task Post()
         {
+            Logger.LogInformation("Incoming cXML post request received.");
             var cxml = new StreamReader(this.Request.Body).ReadToEnd();
 
+            //FIRST LET'S MAKE SURE WE CAN PARSE THE ORDER
             string payloadId = "N/A";
-            var parsedOrder = M3Order.ParseCXMLOrder(cxml, out payloadId);
+            M3Order parsedOrder = null;
+            try
+            {
+                Logger.LogInformation("Parsing cXML Order");
+                parsedOrder = M3Order.ParseCXMLOrder(cxml, out payloadId);
+            }
+            catch(Exception ex)
+            {
+                //Order couldn't be parsed... Let everybody know
+                var html = $"Error: {ex.Message} <br/> Stack Trace: {ex.StackTrace}";
+                await Email.SendEmail(EmailClient, Logger, "ERROR Reading cXML Order", "cxmlorders@bargreen.io", new List<string>() { Settings.OrderEmailRecipient }, html);
+                this.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            }
 
+
+            Logger.LogInformation($"cXML Order Successfully Parsed. payloadId={payloadId}");
+            Logger.LogInformation($"Saving order to S3. payloadId={payloadId}");
             await SaveCXMLToS3(cxml);
 
             await EmailCXMLContents(parsedOrder, cxml);
 
             var orderResponse = new XElement("cXML",
-                    new XAttribute("version", $"1.2.011"),
+                    new XAttribute("version", $"1.2.025"),
                     new XAttribute("payloadID", $"{DateTime.Now.ToString("yyyyMMddhhmmss.1.fff")}@bargreen.com"),
                     new XAttribute(XNamespace.Xml + "lang", "en"),
                     new XAttribute("timestamp", DateTime.Now.ToString("yyyy-MM-ddThh:mm:ssK")),
@@ -88,18 +105,19 @@ namespace cXMLHandler.Controllers
             try
             {
                 var response = await this.S3Client.PutObjectAsync(putRequest);
-                Logger.LogInformation($"Uploaded object {key} to bucket {Settings.S3BucketName}. Request Id: {response.ResponseMetadata.RequestId}");
+                Logger.LogInformation($"Uploaded object {key} to bucket {Settings.S3BucketName}. Request Id: {response.ResponseMetadata.RequestId}");            
             }
             catch (AmazonS3Exception e)
             {
-                this.Response.StatusCode = (int)e.StatusCode;
-                var writer = new StreamWriter(this.Response.Body);
-                writer.Write(e.Message);
+                Logger.LogError($"Error uploading file to S3. error={e.Message}");
+                //this.Response.StatusCode = (int)e.StatusCode;
+                //var writer = new StreamWriter(this.Response.Body);
+                //writer.Write(e.Message);
             }
         }
 
         private async Task EmailCXMLContents(M3Order parsedOrder, string cxml)
-        {            
+        {
             string orderLinesHtml = HtmlGenerator.ToHtmlTable(parsedOrder.OrderLines);
             string subject = $"cXML Order Received - PO {parsedOrder.CustomerPONumber}";
             string finalEmail = $"{orderLinesHtml} <hr/> <textarea style='width:100%;'>{cxml}</textarea>";
