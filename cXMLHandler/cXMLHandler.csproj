@@ -9,7 +9,7 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
     <PackageReference Include="AWSSDK.SecretsManager" Version="3.3.102.42" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.101.148" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.22" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.31.19" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="3.0.2" />
